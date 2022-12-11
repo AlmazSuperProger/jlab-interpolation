@@ -20,19 +20,17 @@ import math
 
 import numpy as np
 import pandas as pd
-from scipy import interpolate
-from scipy.interpolate import RegularGridInterpolator
-from numpy import linspace, zeros, array
+
 from scipy.interpolate import griddata
 
-particle_class = "Pi0P"
-w_user = "1.5"
-q2_user = "1"
+particle_class = "Pin"
+w_user = "1.3"
+q2_user = "0.5"
 cos_user = "empty"
 e_beam_user = "2"
 eps_user = "hello"
 phi_user = "120"
-interp_step_user = "0.1"
+interp_step_user = float("0.2")
 
 df = pd.read_csv('final_table.csv', header=None, sep='\t',
                  names=['Channel', 'MID', 'Wmin', 'Wmax', 'Q2min', 'Q2max', 'Cos(theta)', 'Sigma_T', 'dSigma_T',
@@ -101,7 +99,7 @@ if our_method[0:3] == [1, 1, 1]:  # W, Q2, cos filled
     x_axis_name = "phi"
 elif our_method[0:3] == [1, 1, 0]:  # W, Q2 filled
     interpolation_method = 1
-    x_axis_values = np.linspace(-1, 1, 100)
+    x_axis_values = np.arange(-1, 1, interp_step_user)
     columns = []
     for data in dataframes:
         columns.append([data['w_average'].tolist(), data['q2_average'].tolist(), data['Cos(theta)'].tolist(),
@@ -113,7 +111,7 @@ elif our_method[0:3] == [1, 1, 0]:  # W, Q2 filled
     x_axis_name = "cos(theta)"
 elif our_method[0:3] == [1, 0, 1]:  # W, cos filled
     interpolation_method = 2
-    x_axis_values = np.linspace(0, 6, 100)
+    x_axis_values = np.arange(0, 6, interp_step_user)
     columns = []
     for data in dataframes:
         columns.append([data['w_average'].tolist(), data['Cos(theta)'].tolist(), data['q2_average'].tolist(),
@@ -125,7 +123,7 @@ elif our_method[0:3] == [1, 0, 1]:  # W, cos filled
     x_axis_name = "q2(gev2)"
 elif our_method[0:3] == [0, 1, 1]:  # Q2, cos filled
     interpolation_method = 3
-    x_axis_values = np.linspace(0, 6, 100)
+    x_axis_values = np.arange(0, 6, interp_step_user)
     columns = []
     for data in dataframes:
         columns.append([data['q2_average'].tolist(), data['Cos(theta)'].tolist(), data['w_average'].tolist(),
@@ -146,9 +144,6 @@ if (interpolation_method != 0) and (calc_u_method != 0):
     if our_method[5] == 1:
         calc_cross_section_method = 1
 
-
-
-
 res_x_axis_values = []
 res_sigma_TT = []
 res_sigma_LT = []
@@ -158,6 +153,7 @@ res_dsigma_TT = []
 res_dsigma_LT = []
 res_dsigma_T = []
 res_dsigma_L = []
+
 
 def interpolate_in_one_region(clmns, val_1, val_2, x_axis_values):
     sigma_TT = griddata((clmns[0], clmns[1], clmns[2]),
@@ -189,6 +185,8 @@ def interpolate_in_one_region(clmns, val_1, val_2, x_axis_values):
     x_axis_values = x_axis_values[nans == False]
 
     return (x_axis_values, sigma_TT, sigma_LT, sigma_T, sigma_L, dsigma_TT, dsigma_LT, dsigma_T, dsigma_L)
+
+
 for clmn in columns:
     tmp_res = interpolate_in_one_region(clmn, val_1, val_2, x_axis_values)
     res_x_axis_values = res_x_axis_values + list(tmp_res[0])
@@ -200,6 +198,19 @@ for clmn in columns:
     res_dsigma_LT = res_dsigma_LT + list(tmp_res[6])
     res_dsigma_T = res_dsigma_T + list(tmp_res[7])
     res_dsigma_L = res_dsigma_L + list(tmp_res[8])
+
+res_df = pd.DataFrame({'x_axis_values': res_x_axis_values,
+                       'sigma_TT': res_sigma_TT,
+                       'sigma_LT': res_sigma_LT,
+                       'sigma_T': res_sigma_T,
+                       'sigma_L': res_sigma_L,
+                       'dsigma_TT': res_dsigma_TT,
+                       'dsigma_LT': res_dsigma_LT,
+                       'dsigma_T': res_dsigma_T,
+                       'dsigma_L': res_dsigma_L})
+res_df.sort_values(by='x_axis_values', inplace=True)
+
+
 
 
 
