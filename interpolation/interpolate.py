@@ -21,10 +21,29 @@ import numpy as np
 import pandas as pd
 from scipy.interpolate import griddata
 
+
+
+
+gettext = cgi.FieldStorage()
+particle_class = gettext.getfirst("particle", "empty")
+w_user = gettext.getfirst("w", "empty")
+q2_user = gettext.getfirst("q2", "empty")
+cos_user = gettext.getfirst("cos", "empty")
+e_beam_user = gettext.getfirst("eBeam", "empty")
+eps_user = gettext.getfirst("eps", "empty")
+phi_user = gettext.getfirst("phi", "empty")
+interp_step_user = gettext.getfirst("grid_step_user", "empty")
+x_axis_min = gettext.getfirst("this_min_value", "empty")
+x_axis_max = gettext.getfirst("this_max_value", "empty")
+x_axis_label = "empty"
+
+
+
+
 particle_class = "Pin"
 w_user = "1.3"
 q2_user = "0.5"
-cos_user = "0.1"
+cos_user = "empty"
 e_beam_user = "empty"
 eps_user = "0.92"
 phi_user = "5.75"
@@ -247,8 +266,6 @@ elif interpolation_method == 3:
     res_df['w_values'], res_df['q2_values'], res_df['cos_values'] = res_df['x_axis_values'], \
                                                                     [values[0]] * len(res_df), \
                                                                     [values[1]] * len(res_df)
-res_df.sort_values(by='x_axis_values', inplace=True)
-
 
 if interpolation_method != -1:
     if calc_u_method == 1:
@@ -276,5 +293,11 @@ if interpolation_method != -1:
             res_df['d_res_cross_sect'] = (res_df['d_res_A'] ** 2 + (res_df['d_res_B'] * np.cos(2 * phi)) ** 2 +
                                           (res_df['d_res_C'] * np.cos(phi)) ** 2) ** 0.5
         else:
-            res_df['res_cross_sect'] = [None] * len(res_df)
-            res_df['d_res_cross_sect'] = [None] * len(res_df)
+            phi=values[5]
+            res_df['res_cross_sect'] = res_df['res_A'] + res_df['res_B'] * np.cos(2 * phi) + \
+                                       res_df['res_C'] * np.cos(phi)
+            res_df['d_res_cross_sect'] = (res_df['d_res_A'] ** 2 + (res_df['d_res_B'] * np.cos(2 * phi)) ** 2 +
+                                          (res_df['d_res_C'] * np.cos(phi)) ** 2) ** 0.5
+
+
+res_df.sort_values(by='x_axis_values', inplace=True)
