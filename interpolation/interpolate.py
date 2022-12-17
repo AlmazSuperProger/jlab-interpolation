@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 from scipy.interpolate import griddata
 
+mp = 0.93827
+
 
 def interpolate_in_one_region(clmns, val_1, val_2, x_axis_values):
     base_data = (clmns[0], clmns[1], clmns[2])
@@ -43,7 +45,7 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
     interp_step_user = float(interp_step_user_ext)
     x_axis_min = x_axis_min_ext
     x_axis_max = x_axis_max_ext
-    x_axis_label='empty'
+    x_axis_label = 'empty'
 
     if particle_class == 'Pin':
         partNum = '1212'
@@ -52,15 +54,21 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
         dataframe = df[
             (df.Channel == 8) | (df.Channel == 14) | (df.Channel == 41) | (df.Channel == 141)].copy()
         dataframes = [
-            dataframe[(dataframe['w_average'] >= 1.1) & (dataframe['w_average'] <= 1.4) &
-                      (dataframe['q2_average'] >= 0.2) & (dataframe['q2_average'] <= 0.7)],
-            dataframe[(dataframe['w_average'] >= 1.4) & (dataframe['w_average'] <= 1.6) &
-                      (dataframe['q2_average'] >= 0.2) & (dataframe['q2_average'] <= 0.7)],
             dataframe[(dataframe['w_average'] >= 1.1) & (dataframe['w_average'] <= 1.6) &
-                      (dataframe['q2_average'] >= 1.5) & (dataframe['q2_average'] <= 5)],
-            dataframe[(dataframe['w_average'] >= 1.6) & (dataframe['w_average'] <= 2.1) &
-                      (dataframe['q2_average'] >= 1.5) & (dataframe['q2_average'] <= 5)]
+                      (dataframe['q2_average'] >= 0.2) & (dataframe['q2_average'] <= 0.7)],
+            dataframe[(dataframe['w_average'] >= 1.1) & (dataframe['w_average'] <= 1.15) &
+                      (dataframe['q2_average'] >= 2.115) & (dataframe['q2_average'] <= 4.155)],
+            dataframe[(dataframe['w_average'] >= 1.15) & (dataframe['w_average'] <= 1.69) &
+                      (dataframe['q2_average'] >= 1.72) & (dataframe['q2_average'] <= 4.16)],
+            dataframe[(dataframe['w_average'] >= 1.605) & (dataframe['w_average'] <= 2.01) &
+                      (dataframe['q2_average'] >= 1.8) & (dataframe['q2_average'] <= 4)]
         ]
+        # dataframes = [
+        #     dataframe[df.Channel == 8],
+        #     dataframe[df.Channel == 14],
+        #     dataframe[df.Channel == 41],
+        #     dataframe[df.Channel == 141]]
+
     elif particle_class == 'Pi0P':
         PartNum = '1213'
         ParticleSecret = 'PI0P'
@@ -69,9 +77,13 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
         dataframes = [
             dataframe[(dataframe['w_average'] >= 1) & (dataframe['w_average'] <= 1.8) &
                       (dataframe['q2_average'] >= 0.3) & (dataframe['q2_average'] <= 1.9)],
-            dataframe[(dataframe['w_average'] >= 1) & (dataframe['w_average'] <= 4) &
+            dataframe[(dataframe['w_average'] >= 1) & (dataframe['w_average'] <= 1.4) &
                       (dataframe['q2_average'] >= 2.9) & (dataframe['q2_average'] <= 6.1)]
         ]
+        # dataframes = [
+        #     dataframe[df.Channel == 9],
+        #     dataframe[df.Channel == 37],
+        #     dataframe[df.Channel == 170]]
 
     # Interpolation
     # method - 0: empty
@@ -200,8 +212,6 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
     if interpolation_method == 0:
         if len(res_df) > 0:
             len_val_5 = len(values[5])
-            print(values[5])
-            print(len(values[5]))
             res_df = pd.DataFrame({'x_axis_values': values[5],
                                    'sigma_TT': res_sigma_TT * len_val_5,
                                    'sigma_LT': res_sigma_LT * len_val_5,
