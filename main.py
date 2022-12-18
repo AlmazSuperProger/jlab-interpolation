@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import cgi
 import pandas as pd
 from interpolation.interpolate import make_interpolation
+from interpolation.get_exp_data import get_exp_data
 from make_html.make_html import print_end, print_head, create_form_template
 from make_html.create_graph_html import create_graph_html
 
@@ -32,8 +33,8 @@ x_axis_max_ext = gettext.getfirst("x_max", "empty")
 # x_axis_max_ext = "val"
 
 df_ext = pd.read_csv('final_table.csv', header=None, sep='\t',
-                     names=['Channel', 'MID', 'Wmin', 'Wmax', 'Q2min', 'Q2max', 'Cos(theta)', 'Sigma_T', 'dSigma_T',
-                            'Sigma_L', 'dSigma_L', 'Sigma_TT', 'dSigma_TT', 'Sigma_LT', 'dSigma_LT', 'eps'])
+                     names=['Channel', 'MID', 'Wmin', 'Wmax', 'Q2min', 'Q2max', 'Cos(theta)', 'sigma_t', 'd_sigma_t',
+                            'sigma_l', 'd_sigma_l', 'sigma_tt', 'd_sigma_tt', 'sigma_lt', 'd_sigma_lt', 'eps'])
 df_ext['w_average'] = (df_ext['Wmin'] + df_ext['Wmax']) / 2
 df_ext['q2_average'] = (df_ext['Q2min'] + df_ext['Q2max']) / 2
 
@@ -54,7 +55,11 @@ if __name__ == '__main__':
                                                                                                  x_axis_min_ext,
                                                                                                  x_axis_max_ext)
 
+    experimental_data_df = get_exp_data(df_ext, particle_class_ext, interp_method,
+                                        w_user_ext, q2_user_ext, cos_user_ext,
+                                        x_axis_min_ext, x_axis_max_ext)
+
     print_head()
     create_form_template(values_to_func)
-    create_graph_html(res_df, interp_method, calc_u_method, calc_cr_sect_method, x_axis_label)
+    create_graph_html(res_df,experimental_data_df, interp_method, calc_u_method, calc_cr_sect_method, x_axis_label)
     print_end()

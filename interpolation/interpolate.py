@@ -126,9 +126,9 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
             values[5] = np.arange(-180, 180, 5).tolist()
         for data in dataframes:
             columns.append([data['w_average'].tolist(), data['q2_average'].tolist(), data['Cos(theta)'].tolist(),
-                            data['Sigma_T'].tolist(), data['dSigma_T'].tolist(), data['Sigma_L'].tolist(),
-                            data['dSigma_L'].tolist(), data['Sigma_TT'].tolist(), data['dSigma_TT'].tolist(),
-                            data['Sigma_LT'].tolist(), data['dSigma_LT'].tolist()])
+                            data['sigma_T'].tolist(), data['d_sigma_T'].tolist(), data['sigma_L'].tolist(),
+                            data['d_digma_L'].tolist(), data['sigma_TT'].tolist(), data['d_sigma_TT'].tolist(),
+                            data['sigma_LT'].tolist(), data['d_sigma_LT'].tolist()])
         values[-1] = "phi"
         # values[2]=[values[2]]
     elif our_method[0:3] == [1, 1, 0]:  # W, Q2 filled
@@ -142,9 +142,9 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
         columns = []
         for data in dataframes:
             columns.append([data['w_average'].tolist(), data['q2_average'].tolist(), data['Cos(theta)'].tolist(),
-                            data['Sigma_T'].tolist(), data['dSigma_T'].tolist(), data['Sigma_L'].tolist(),
-                            data['dSigma_L'].tolist(), data['Sigma_TT'].tolist(), data['dSigma_TT'].tolist(),
-                            data['Sigma_LT'].tolist(), data['dSigma_LT'].tolist()])
+                            data['sigma_t'].tolist(), data['d_sigma_t'].tolist(), data['sigma_l'].tolist(),
+                            data['d_sigma_l'].tolist(), data['sigma_tt'].tolist(), data['d_sigma_tt'].tolist(),
+                            data['sigma_lt'].tolist(), data['d_sigma_lt'].tolist()])
     elif our_method[0:3] == [1, 0, 1]:  # W, cos filled
         interpolation_method = 2
         values[0:2] = [values[0], values[2]]
@@ -155,9 +155,9 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
             values[2] = np.arange(0, 6, values[8])
         for data in dataframes:
             columns.append([data['w_average'].tolist(), data['Cos(theta)'].tolist(), data['q2_average'].tolist(),
-                            data['Sigma_T'].tolist(), data['dSigma_T'].tolist(), data['Sigma_L'].tolist(),
-                            data['dSigma_L'].tolist(), data['Sigma_TT'].tolist(), data['dSigma_TT'].tolist(),
-                            data['Sigma_LT'].tolist(), data['dSigma_LT'].tolist()])
+                            data['sigma_t'].tolist(), data['d_sigma_t'].tolist(), data['sigma_l'].tolist(),
+                            data['d_sigma_l'].tolist(), data['sigma_tt'].tolist(), data['d_sigma_tt'].tolist(),
+                            data['sigma_lt'].tolist(), data['d_sigma_lt'].tolist()])
     elif our_method[0:3] == [0, 1, 1]:  # Q2, cos filled
         interpolation_method = 3
         values[0:2] = [values[1], values[2]]
@@ -169,10 +169,9 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
 
         for data in dataframes:
             columns.append([data['q2_average'].tolist(), data['Cos(theta)'].tolist(), data['w_average'].tolist(),
-                            data['Sigma_T'].tolist(), data['dSigma_T'].tolist(),
-                            data['Sigma_L'].tolist(), data['dSigma_L'].tolist(),
-                            data['Sigma_TT'].tolist(), data['dSigma_TT'].tolist(),
-                            data['Sigma_LT'].tolist(), data['dSigma_LT'].tolist()])
+                            data['sigma_t'].tolist(), data['d_sigma_t'].tolist(), data['sigma_l'].tolist(),
+                            data['d_sigma_l'].tolist(), data['sigma_tt'].tolist(), data['d_sigma_tt'].tolist(),
+                            data['sigma_lt'].tolist(), data['d_sigma_lt'].tolist()])
 
     if interpolation_method != -1:
         if our_method[3] == 1:
@@ -203,27 +202,27 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
         res_dsigma_L = res_dsigma_L + tmp_res[8]
 
     res_df = pd.DataFrame({'x_axis_values': res_x_axis_values,
-                           'sigma_TT': res_sigma_TT,
-                           'sigma_LT': res_sigma_LT,
-                           'sigma_T': res_sigma_T,
-                           'sigma_L': res_sigma_L,
-                           'dsigma_TT': res_dsigma_TT,
-                           'dsigma_LT': res_dsigma_LT,
-                           'dsigma_T': res_dsigma_T,
-                           'dsigma_L': res_dsigma_L})
+                           'sigma_tt': res_sigma_TT,
+                           'sigma_lt': res_sigma_LT,
+                           'sigma_t': res_sigma_T,
+                           'sigma_l': res_sigma_L,
+                           'd_sigma_tt': res_dsigma_TT,
+                           'd_sigma_lt': res_dsigma_LT,
+                           'd_sigma_t': res_dsigma_T,
+                           'd_sigma_l': res_dsigma_L})
 
     if interpolation_method == 0:
         if len(res_df) > 0:
             len_val_5 = len(values[5])
             res_df = pd.DataFrame({'x_axis_values': values[5],
-                                   'sigma_TT': res_sigma_TT * len_val_5,
-                                   'sigma_LT': res_sigma_LT * len_val_5,
-                                   'sigma_T': res_sigma_T * len_val_5,
-                                   'sigma_L': res_sigma_L * len_val_5,
-                                   'dsigma_TT': res_dsigma_TT * len_val_5,
-                                   'dsigma_LT': res_dsigma_LT * len_val_5,
-                                   'dsigma_T': res_dsigma_T * len_val_5,
-                                   'dsigma_L': res_dsigma_L * len_val_5})
+                                   'sigma_tt': res_sigma_TT * len_val_5,
+                                   'sigma_lt': res_sigma_LT * len_val_5,
+                                   'sigma_t': res_sigma_T * len_val_5,
+                                   'sigma_l': res_sigma_L * len_val_5,
+                                   'd_sigma_tt': res_dsigma_TT * len_val_5,
+                                   'd_sigma_lt': res_dsigma_LT * len_val_5,
+                                   'd_sigma_t': res_dsigma_T * len_val_5,
+                                   'd_sigma_l': res_dsigma_L * len_val_5})
 
             res_df['w_values'], res_df['q2_values'], res_df['cos_values'] = [values[0]] * len_val_5, \
                                                                             [values[1]] * len_val_5, \
@@ -252,12 +251,12 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
             res_df['eps'] = 1 / (1 + 2 * (nu ** 2 + tmp_w) / (4 * (tmp_ebeam - nu) * tmp_ebeam - tmp_w))
 
         if calc_u_method != -1:
-            res_df['res_A'] = res_df['sigma_T'] + res_df['eps'] * res_df['sigma_L']
-            res_df['d_res_A'] = ((res_df['dsigma_T'] ** 2) + ((res_df['eps'] * res_df['dsigma_L']) ** 2)) ** 0.5
-            res_df['res_B'] = res_df['eps'] * res_df['sigma_TT']
-            res_df['d_res_B'] = res_df['eps'] * res_df['dsigma_TT']
-            res_df['res_C'] = ((2 * res_df['eps'] * (res_df['eps'] + 1)) ** 0.5) * res_df['sigma_LT']
-            res_df['d_res_C'] = ((2 * res_df['eps'] * (res_df['eps'] + 1)) ** 0.5) * res_df['dsigma_LT']
+            res_df['res_A'] = res_df['sigma_t'] + res_df['eps'] * res_df['sigma_l']
+            res_df['d_res_A'] = ((res_df['d_sigma_t'] ** 2) + ((res_df['eps'] * res_df['d_sigma_l']) ** 2)) ** 0.5
+            res_df['res_B'] = res_df['eps'] * res_df['sigma_tt']
+            res_df['d_res_B'] = res_df['eps'] * res_df['dsigma_tt']
+            res_df['res_C'] = ((2 * res_df['eps'] * (res_df['eps'] + 1)) ** 0.5) * res_df['sigma_lt']
+            res_df['d_res_C'] = ((2 * res_df['eps'] * (res_df['eps'] + 1)) ** 0.5) * res_df['d_sigma_lt']
 
         if calc_cross_section_method == 2:
             phi = values[5]
