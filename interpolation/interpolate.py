@@ -180,8 +180,11 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
         elif our_method[4] == 1:
             calc_u_method = 1
     if (interpolation_method != -1) and (calc_u_method != -1):
-        if our_method[5] == 1:
+        if (interpolation_method == 0) and (our_method[5]==0):
             calc_cross_section_method = 1
+        elif interpolation_method != 0  and (our_method[5]==1):
+            calc_cross_section_method = 2
+
 
     res_x_axis_values = []
     res_sigma_TT, res_sigma_LT, res_sigma_T, res_sigma_L = [], [], [], []
@@ -256,19 +259,18 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
             res_df['res_C'] = ((2 * res_df['eps'] * (res_df['eps'] + 1)) ** 0.5) * res_df['sigma_LT']
             res_df['d_res_C'] = ((2 * res_df['eps'] * (res_df['eps'] + 1)) ** 0.5) * res_df['dsigma_LT']
 
-        if (calc_u_method != -1) and (calc_cross_section_method == 1):
-            if interpolation_method == 0:
-                phi = res_df['x_axis_values'].copy() * (np.pi / 180)
-                res_df['res_cross_sect'] = res_df['res_A'] + res_df['res_B'] * np.cos(2 * phi) + \
-                                           res_df['res_C'] * np.cos(phi)
-                res_df['d_res_cross_sect'] = (res_df['d_res_A'] ** 2 + (res_df['d_res_B'] * np.cos(2 * phi)) ** 2 +
-                                              (res_df['d_res_C'] * np.cos(phi)) ** 2) ** 0.5
-            else:
-                phi = values[5]
-                res_df['res_cross_sect'] = res_df['res_A'] + res_df['res_B'] * np.cos(2 * phi) + \
-                                           res_df['res_C'] * np.cos(phi)
-                res_df['d_res_cross_sect'] = (res_df['d_res_A'] ** 2 + (res_df['d_res_B'] * np.cos(2 * phi)) ** 2 +
-                                              (res_df['d_res_C'] * np.cos(phi)) ** 2) ** 0.5
+        if calc_cross_section_method == 2:
+            phi = values[5]
+            res_df['res_cross_sect'] = res_df['res_A'] + res_df['res_B'] * np.cos(2 * phi) + \
+                                       res_df['res_C'] * np.cos(phi)
+            res_df['d_res_cross_sect'] = (res_df['d_res_A'] ** 2 + (res_df['d_res_B'] * np.cos(2 * phi)) ** 2 +
+                                          (res_df['d_res_C'] * np.cos(phi)) ** 2) ** 0.5
+        elif calc_cross_section_method == 1:
+            phi = res_df['x_axis_values'].copy() * (np.pi / 180)
+            res_df['res_cross_sect'] = res_df['res_A'] + res_df['res_B'] * np.cos(2 * phi) + \
+                                       res_df['res_C'] * np.cos(phi)
+            res_df['d_res_cross_sect'] = (res_df['d_res_A'] ** 2 + (res_df['d_res_B'] * np.cos(2 * phi)) ** 2 +
+                                          (res_df['d_res_C'] * np.cos(phi)) ** 2) ** 0.5
 
     res_df.sort_values(by='x_axis_values', inplace=True)
     x_axis_label = values[-1]
