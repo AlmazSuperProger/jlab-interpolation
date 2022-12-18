@@ -8,6 +8,7 @@ from interpolation.interpolate import make_interpolation
 from interpolation.get_exp_data import get_exp_data
 from make_html.make_html import print_end, print_head, create_form_template
 from make_html.create_graph_html import create_graph_html
+from interpolation.calculate_intgral import calculate_integral
 
 gettext = cgi.FieldStorage()
 particle_class_ext = gettext.getfirst("particle", "empty")
@@ -21,9 +22,9 @@ interp_step_user_ext = float(gettext.getfirst("grid_step_user", "0.01"))
 x_axis_min_ext = gettext.getfirst("x_min", "empty")
 x_axis_max_ext = gettext.getfirst("x_max", "empty")
 
-# particle_class_ext = "Pin"
-# w_user_ext = "1.23"
-# q2_user_ext = "0.5"
+particle_class_ext = "Pin"
+w_user_ext = "1.23"
+q2_user_ext = "0.5"
 # cos_user_ext = "empty"
 # e_beam_user_ext = "empty"
 # eps_user_ext = "0.92"
