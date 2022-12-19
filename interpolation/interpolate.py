@@ -126,9 +126,9 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
             values[5] = np.arange(-180, 180, 5).tolist()
         for data in dataframes:
             columns.append([data['w_average'].tolist(), data['q2_average'].tolist(), data['Cos(theta)'].tolist(),
-                            data['sigma_T'].tolist(), data['d_sigma_T'].tolist(), data['sigma_L'].tolist(),
-                            data['d_digma_L'].tolist(), data['sigma_TT'].tolist(), data['d_sigma_TT'].tolist(),
-                            data['sigma_LT'].tolist(), data['d_sigma_LT'].tolist()])
+                            data['sigma_t'].tolist(), data['d_sigma_t'].tolist(), data['sigma_l'].tolist(),
+                            data['d_sigma_l'].tolist(), data['sigma_tt'].tolist(), data['d_sigma_tt'].tolist(),
+                            data['sigma_lt'].tolist(), data['d_sigma_lt'].tolist()])
         values[-1] = "phi"
         # values[2]=[values[2]]
     elif our_method[0:3] == [1, 1, 0]:  # W, Q2 filled
@@ -178,10 +178,10 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
             calc_u_method = 0
         elif our_method[4] == 1:
             calc_u_method = 1
-    if (interpolation_method != -1) and (calc_u_method != -1):
-        if (interpolation_method == 0) and (our_method[5]==0):
+    if calc_u_method != -1:
+        if (interpolation_method == 0) and (our_method[5] != 1):
             calc_cross_section_method = 1
-        elif interpolation_method != 0  and (our_method[5]==1):
+        elif (interpolation_method != 0) and (our_method[5] == 1):
             calc_cross_section_method = 2
 
 
@@ -254,7 +254,7 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
             res_df['res_A'] = res_df['sigma_t'] + res_df['eps'] * res_df['sigma_l']
             res_df['d_res_A'] = ((res_df['d_sigma_t'] ** 2) + ((res_df['eps'] * res_df['d_sigma_l']) ** 2)) ** 0.5
             res_df['res_B'] = res_df['eps'] * res_df['sigma_tt']
-            res_df['d_res_B'] = res_df['eps'] * res_df['dsigma_tt']
+            res_df['d_res_B'] = res_df['eps'] * res_df['d_sigma_tt']
             res_df['res_C'] = ((2 * res_df['eps'] * (res_df['eps'] + 1)) ** 0.5) * res_df['sigma_lt']
             res_df['d_res_C'] = ((2 * res_df['eps'] * (res_df['eps'] + 1)) ** 0.5) * res_df['d_sigma_lt']
 

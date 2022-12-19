@@ -3,7 +3,6 @@ import pandas as pd
 
 
 def calculate_integral(df_to_int):
-
     df_to_int = df_to_int.sort_values(by='x_axis_values')
     x_ax_val = np.array(df_to_int['x_axis_values'])
     sig_t = np.array(df_to_int['sigma_t'])
