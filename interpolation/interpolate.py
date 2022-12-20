@@ -50,7 +50,7 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
     if particle_class == 'Pin':
         partNum = '1212'
         ParticleSecret = 'PIN'
-        ParticleBeauty = 'gvp--->ПЂвЃєn'
+        ParticleBeauty = 'gvp->π⁺n'
         dataframe = df[
             (df.Channel == 8) | (df.Channel == 14) | (df.Channel == 41) | (df.Channel == 141)].copy()
         dataframes = [
@@ -72,7 +72,7 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
     elif particle_class == 'Pi0P':
         PartNum = '1213'
         ParticleSecret = 'PI0P'
-        ParticleBeauty = 'gvp--->ПЂвЃ°p'
+        ParticleBeauty = 'gvp->π⁰p'
         dataframe = df[(df.Channel == 9) | (df.Channel == 37) | (df.Channel == 170)].copy()
         dataframes = [
             dataframe[(dataframe['w_average'] >= 1) & (dataframe['w_average'] <= 1.8) &

@@ -8,7 +8,7 @@ from interpolation.interpolate import make_interpolation
 from interpolation.get_exp_data import get_exp_data
 from make_html.make_html import print_end, print_head, create_form_template
 from make_html.create_graph_html import create_graph_html
-from interpolation.calculate_intgral import calculate_integral
+
 
 gettext = cgi.FieldStorage()
 particle_class_ext = gettext.getfirst("particle", "empty")
