@@ -165,6 +165,13 @@ def create_form_template(tmp_values):
     x_axis_min_ext = tmp_values[8]
     x_axis_max_ext = tmp_values[9]
 
+    this_file_name = str(particle_class_ext) + "_" + str(w_user_ext) + "_" + str(q2_user_ext) + "_" + str(
+        cos_user_ext) + '.csv'
+    file_dir_name = 'https://clas.sinp.msu.ru/~almaz/save_folder/structure_functions/'+this_file_name
+
+    link_text="""<br> <a href="{}" download="{}">Download Your
+            CSV file here</a> <br>""".format(file_dir_name, this_file_name)
+
     tmp_dict = {'val0': particle_class_ext,
                 'val1': w_user_ext,
                 'val2': q2_user_ext,
@@ -174,7 +181,8 @@ def create_form_template(tmp_values):
                 'val6': phi_user_ext,
                 'val7': interp_step_user_ext,
                 'val8': x_axis_min_ext,
-                'val9': x_axis_max_ext}
+                'val9': x_axis_max_ext,
+                'val10':link_text}
 
     tmp = Template("""
     <br><br><br><br>
@@ -183,11 +191,9 @@ def create_form_template(tmp_values):
             <div class="box_in_the_box">
                 <br>
                 <br>
-                минибокс 1
-                <br>
-                Model
-                <br><br><br><br><br><br><br>
-                <p><input type="checkbox" id="coding" name="CheckBox1"> Check Box 1</p>
+
+
+
             </div>
             <div class="second_box_in_the_box">
                 <br>
@@ -210,6 +216,10 @@ def create_form_template(tmp_values):
                     <br>
                     <br>
                     x_min и x_max позволяют вывести зависимости в необходимом диапазоне (обрезать график по оси x)
+                    <br>
+                    <br>
+                    
+                    {{ val10 }}
 
                 </div>
                 <div class="right_box">
@@ -266,6 +276,9 @@ def create_form_template(tmp_values):
         </div>
 
     </form>
+    
+    <br>
+    
     
     <br><br>""")
 

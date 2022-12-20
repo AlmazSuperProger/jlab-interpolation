@@ -8,7 +8,7 @@ from interpolation.interpolate import make_interpolation
 from interpolation.get_exp_data import get_exp_data
 from make_html.make_html import print_end, print_head, create_form_template
 from make_html.create_graph_html import create_graph_html
-
+from make_html.save_df import save_data
 
 gettext = cgi.FieldStorage()
 particle_class_ext = gettext.getfirst("particle", "empty")
@@ -55,6 +55,7 @@ if __name__ == '__main__':
                                                                                                  interp_step_user_ext,
                                                                                                  x_axis_min_ext,
                                                                                                  x_axis_max_ext)
+    save_data(res_df, particle_class_ext, w_user_ext, q2_user_ext, cos_user_ext)
 
     experimental_data_df = get_exp_data(df_ext, particle_class_ext, interp_method,
                                         w_user_ext, q2_user_ext, cos_user_ext,
@@ -62,5 +63,5 @@ if __name__ == '__main__':
 
     print_head()
     create_form_template(values_to_func)
-    create_graph_html(res_df,experimental_data_df, interp_method, calc_u_method, calc_cr_sect_method, x_axis_label)
+    create_graph_html(res_df, experimental_data_df, interp_method, calc_u_method, calc_cr_sect_method, x_axis_label)
     print_end()
