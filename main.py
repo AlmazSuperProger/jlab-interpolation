@@ -30,7 +30,7 @@ x_axis_max_ext = gettext.getfirst("x_max", "empty")
 # eps_user_ext = "empty"
 # phi_user_ext = "5.75"
 # interp_step_user_ext = float("0.1")
-# x_axis_min_ext = "empt"
+# x_axis_min_ext = "empty"
 # x_axis_max_ext = "val"
 
 df_ext = pd.read_csv('final_table.csv', header=None, sep='\t',
@@ -63,5 +63,6 @@ if __name__ == '__main__':
 
     print_head()
     create_form_template(values_to_func)
-    create_graph_html(res_df, experimental_data_df, interp_method, calc_u_method, calc_cr_sect_method, x_axis_label)
+    create_graph_html(particle_class_ext, res_df, experimental_data_df, interp_method, calc_u_method,
+                      calc_cr_sect_method, x_axis_label)
     print_end()
