@@ -247,8 +247,8 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
             tmp_w = np.array(res_df['w_values'])
             tmp_q2 = np.array(res_df['q2_values'])
             tmp_ebeam = values[3]
-            nu = (tmp_w ** 2 + tmp_w - mp * mp) / (2 * mp)
-            res_df['eps'] = 1 / (1 + 2 * (nu ** 2 + tmp_w) / (4 * (tmp_ebeam - nu) * tmp_ebeam - tmp_w))
+            nu = (tmp_w ** 2 + tmp_q2 - mp * mp) / (2 * mp)
+            res_df['eps'] = 1 / (1 + 2 * (nu ** 2 + tmp_q2) / (4 * (tmp_ebeam - nu) * tmp_ebeam - tmp_q2))
 
         if calc_u_method != -1:
             res_df['res_A'] = res_df['sigma_t'] + res_df['eps'] * res_df['sigma_l']
