@@ -340,13 +340,13 @@ class simpleMeasure(object):
                 elif str(self.q2_class) == 'empty':
                     mp = 0.93827
                     nu = (self.w_class ** 2 + self.x_axis_values - mp * mp) / (2 * mp)
-                    self.eps_class = 1 / (1 + 2 * (nu ** 2 + self.x_axis_values) / (
+                    self.eps_class = 1 / (1 + 2 * (nu * 2 + self.x_axis_values) / (
                                 4 * (self.e_beam_class - nu) * self.e_beam_class - self.x_axis_values))
 
                 elif not (str(self.w_class) == 'empty') and not (str(self.q2_class) == 'empty'):
                     mp = 0.93827
                     nu = (self.w_class ** 2 + self.q2_class - mp * mp) / (2 * mp)
-                    self.eps_class = 1 / (1 + 2 * (nu ** 2 + self.q2_class) / (
+                    self.eps_class = 1 / (1 + 2 * (nu * 2 + self.q2_class) / (
                                 4 * (self.e_beam_class - nu) * self.e_beam_class - self.q2_class))
                     self.eps_class = np.full(len(self.x_axis_values), self.eps_class)
         except:
