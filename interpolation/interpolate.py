@@ -148,7 +148,7 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
     elif our_method[0:3] == [1, 0, 1]:  # W, cos filled
         interpolation_method = 2
         values[0:2] = [values[0], values[2]]
-        values[-1] = "q2(gev2)"
+        values[-1] = "Q2 (GeV2)"
         if our_method[6:8] == [1, 1]:
             values[2] = np.arange(values[6], values[7] + 0.01, values[8])
         else:
@@ -161,7 +161,7 @@ def make_interpolation(df, particle_class_ext, w_user_ext, q2_user_ext, cos_user
     elif our_method[0:3] == [0, 1, 1]:  # Q2, cos filled
         interpolation_method = 3
         values[0:2] = [values[1], values[2]]
-        values[-1] = "w(gev)"
+        values[-1] = "W (GeV)"
         if our_method[6:8] == [1, 1]:
             values[2] = np.arange(values[6], values[7] + 0.01, values[8])
         else:

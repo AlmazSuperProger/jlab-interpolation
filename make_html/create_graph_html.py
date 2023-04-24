@@ -30,7 +30,7 @@ def create_graph_html(particle_ext,
                                                      x_exp_data=[],
                                                      y_exp_data=[],
                                                      dy_exp_data=[],
-                                                     layout_title='cross_section',
+                                                     layout_title='Differential Cross Section (mcbn/sterad)',
                                                      x_label=x_axis_label_ext)
             print("{}".format(fig_cross_section.to_html(full_html=False)))
             print("<br>")
@@ -41,7 +41,7 @@ def create_graph_html(particle_ext,
                                             x_exp_data=exp_data_df['x_axis_values'],
                                             y_exp_data=exp_data_df['sigma_tt'],
                                             dy_exp_data=exp_data_df['d_sigma_tt'],
-                                            layout_title='sigma_tt',
+                                            layout_title='Transverse-Transverse structure function (mcbn/sterad)',
                                             x_label=x_axis_label_ext)
 
         fig_sigma_lt = graph_inerp_exp_maid(x_array=res_df_ext['x_axis_values'], y_array=res_df_ext['sigma_lt'],
@@ -50,7 +50,7 @@ def create_graph_html(particle_ext,
                                             x_exp_data=exp_data_df['x_axis_values'],
                                             y_exp_data=exp_data_df['sigma_lt'],
                                             dy_exp_data=exp_data_df['d_sigma_lt'],
-                                            layout_title='sigma_lt',
+                                            layout_title='Longitudinal-Transverse structure function (mcbn/sterad)',
                                             x_label=x_axis_label_ext)
 
         fig_sigma_t = graph_inerp_exp_maid(x_array=res_df_ext['x_axis_values'], y_array=res_df_ext['sigma_t'],
@@ -59,7 +59,7 @@ def create_graph_html(particle_ext,
                                            x_exp_data=exp_data_df['x_axis_values'],
                                            y_exp_data=exp_data_df['sigma_t'],
                                            dy_exp_data=exp_data_df['d_sigma_t'],
-                                           layout_title='sigma_t',
+                                           layout_title='Transverse structure function (mcbn/sterad)',
                                            x_label=x_axis_label_ext)
 
         fig_sigma_l = graph_inerp_exp_maid(x_array=res_df_ext['x_axis_values'], y_array=res_df_ext['sigma_l'],
@@ -68,7 +68,7 @@ def create_graph_html(particle_ext,
                                            x_exp_data=exp_data_df['x_axis_values'],
                                            y_exp_data=exp_data_df['sigma_l'],
                                            dy_exp_data=exp_data_df['d_sigma_l'],
-                                           layout_title='sigma_l',
+                                           layout_title='Longitudinal structure function (mcbn/sterad)',
                                            x_label=x_axis_label_ext)
 
         if interpolation_method_ext > 0:
@@ -95,6 +95,7 @@ def create_graph_html(particle_ext,
                                             round(integral_values[3], 4),
                                             round(integral_values[7], 4)))
 
+        print("<br><br>")
         print("{}".format(fig_sigma_tt.to_html(full_html=False)))
         print("<br>")
         print("{}".format(fig_sigma_lt.to_html(full_html=False)))
