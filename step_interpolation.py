@@ -52,7 +52,7 @@ def interpolate_in_one_region(dataframe, particle, w_min, w_max, q2_min, q2_max,
         x_axis_label = 'W(GeV)'
         interp_df = dataframe[
             (dataframe.w_average >= w_min) & (dataframe.w_average <= w_max) & (dataframe.q2_average >= q2_min) & (
-                        dataframe.q2_average <= q2_max)].copy()
+                    dataframe.q2_average <= q2_max)].copy()
         sigma_TT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
                             interp_df['Sigma_TT'], (x_axis_values, q2_interp, cos_interp), method='linear',
                             rescale=True)
@@ -81,7 +81,7 @@ def interpolate_in_one_region(dataframe, particle, w_min, w_max, q2_min, q2_max,
         x_axis_label = 'Q2 (GeV2)'
         interp_df = dataframe[
             (dataframe.w_average >= w_min) & (dataframe.w_average <= w_max) & (dataframe.q2_average >= q2_min) & (
-                        dataframe.q2_average <= q2_max)].copy()
+                    dataframe.q2_average <= q2_max)].copy()
         sigma_TT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
                             interp_df['Sigma_TT'], (w_interp, x_axis_values, cos_interp), method='linear', rescale=True)
         sigma_LT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
@@ -110,7 +110,7 @@ def interpolate_in_one_region(dataframe, particle, w_min, w_max, q2_min, q2_max,
         x_axis_label = 'Cos(theta)'
         interp_df = dataframe[
             (dataframe.w_average >= w_min) & (dataframe.w_average <= w_max) & (dataframe.q2_average >= q2_min) & (
-                        dataframe.q2_average <= q2_max)].copy()
+                    dataframe.q2_average <= q2_max)].copy()
         sigma_TT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
                             interp_df['Sigma_TT'], (w_interp, q2_interp, x_axis_values), method='linear', rescale=True)
         sigma_LT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
@@ -135,23 +135,28 @@ def interpolate_in_one_region(dataframe, particle, w_min, w_max, q2_min, q2_max,
         x_axis_values = np.zeros(1)
         interp_df = dataframe[
             (dataframe.w_average >= w_min) & (dataframe.w_average <= w_max) & (dataframe.q2_average >= q2_min) & (
-                        dataframe.q2_average <= q2_max)].copy()
-        sigma_TT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
-                            interp_df['Sigma_TT'], (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
-        sigma_LT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
-                            interp_df['Sigma_LT'], (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
-        sigma_T = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
-                           interp_df['Sigma_T'], (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
-        sigma_L = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
-                           interp_df['Sigma_L'], (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
-        dsigma_TT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
-                             interp_df['dSigma_TT'], (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
-        dsigma_LT = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
-                             interp_df['dSigma_LT'], (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
-        dsigma_T = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
-                            interp_df['dSigma_T'], (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
-        dsigma_L = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
-                            interp_df['dSigma_L'], (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
+                    dataframe.q2_average <= q2_max)].copy()
+
+        _values = (interp_df['Sigma_TT'].ravel().flatten(),
+                   interp_df['Sigma_LT'].ravel().flatten(),
+                   interp_df['Sigma_T'].ravel().flatten(),
+                   interp_df['Sigma_L'].ravel().flatten(),
+                   interp_df['dSigma_TT'].ravel().flatten(),
+                   interp_df['dSigma_LT'].ravel().flatten(),
+                   interp_df['dSigma_T'].ravel().flatten(),
+                   interp_df['dSigma_L'].ravel().flatten())
+        _values = np.stack((_values), axis=-1)
+
+        interpolated_values = griddata((interp_df.w_average, interp_df.q2_average, interp_df['Cos(theta)']),
+                                       _values, (w_interp, q2_interp, cos_interp), method='linear', rescale=True)
+        sigma_TT = interpolated_values[:, 0]
+        sigma_LT = interpolated_values[:, 1]
+        sigma_T = interpolated_values[:, 2]
+        sigma_L = interpolated_values[:, 3]
+        dsigma_TT = interpolated_values[:, 4]
+        dsigma_LT = interpolated_values[:, 5]
+        dsigma_T = interpolated_values[:, 6]
+        dsigma_L = interpolated_values[:, 7]
 
     nans = np.isnan(sigma_TT)
     sigma_TT = sigma_TT[nans == False]
@@ -335,19 +340,19 @@ class simpleMeasure(object):
                     mp = 0.93827
                     nu = ((self.x_axis_values ** 2) + self.q2_class - mp * mp) / (2 * mp)
                     self.eps_class = 1 / (1 + 2 * (nu ** 2 + self.q2_class) / (
-                                4 * (self.e_beam_class - nu) * self.e_beam_class - self.q2_class))
+                            4 * (self.e_beam_class - nu) * self.e_beam_class - self.q2_class))
 
                 elif str(self.q2_class) == 'empty':
                     mp = 0.93827
                     nu = (self.w_class ** 2 + self.x_axis_values - mp * mp) / (2 * mp)
                     self.eps_class = 1 / (1 + 2 * (nu ** 2 + self.x_axis_values) / (
-                                4 * (self.e_beam_class - nu) * self.e_beam_class - self.x_axis_values))
+                            4 * (self.e_beam_class - nu) * self.e_beam_class - self.x_axis_values))
 
                 elif not (str(self.w_class) == 'empty') and not (str(self.q2_class) == 'empty'):
                     mp = 0.93827
                     nu = (self.w_class ** 2 + self.q2_class - mp * mp) / (2 * mp)
                     self.eps_class = 1 / (1 + 2 * (nu ** 2 + self.q2_class) / (
-                                4 * (self.e_beam_class - nu) * self.e_beam_class - self.q2_class))
+                            4 * (self.e_beam_class - nu) * self.e_beam_class - self.q2_class))
                     self.eps_class = np.full(len(self.x_axis_values), self.eps_class)
         except:
             self.cant_calculate_eps = True
@@ -368,7 +373,7 @@ class simpleMeasure(object):
             phi = self.phi_class * (np.pi / 180)
             self.res_cross_sect = self.res_A + self.res_B * np.cos(2 * phi) + self.res_C * np.cos(phi)
             self.d_res_cross_sect = (self.d_res_A ** 2 + (self.d_res_B * np.cos(2 * phi)) ** 2 + (
-                        self.d_res_C * np.cos(phi)) ** 2) ** 0.5
+                    self.d_res_C * np.cos(phi)) ** 2) ** 0.5
 
         if self.check_phi and (self.check_eps or self.check_e_beam):
             self.res_df = pd.DataFrame({'x_axis_values': self.x_axis_values,
